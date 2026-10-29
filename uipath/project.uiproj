@@ -1,0 +1,6 @@
+{
+  "Name": "FeedbackClassificationRouting",
+  "ProjectType": "Process",
+  "Description": "Runs the Python feedback classification bot, then reads the routed results and logs the routing per department.",
+  "MainFile": "Main.xaml"
+}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Automation report{% endblock %}
+
+{% block content %}
+<div class="card wide viz-root">
+{% if summary is none %}
+  <h1>Automation report</h1>
+  <p class="empty">
+    No report yet. Run the bot - <code>python src\main.py</code>, or the UiPath workflow in
+    <code>uipath\</code> - to classify and route the feedback collected so far, then reload this page.
+  </p>
+{% else %}
+  <p class="eyebrow">Last bot run &middot; {{ summary.run_time }}</p>
+  <h1>Automation report</h1>
+  <p class="lede">
+    {{ summary.records_read }} feedback record{{ 's' if summary.records_read != 1 }} read this run,
+    classified by <code>config/rules.json</code> and routed with no one reading them by hand.
+  </p>
+
+  <div class="kpi-row">
+    <div class="stat-tile">
+      <span class="stat-label">Records read</span>
+      <span class="stat-value">{{ summary.records_read }}</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-label">Routed automatically</span>
+      <span class="stat-value">{{ summary.routed }}</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-label">Needs review</span>
+      <span class="stat-value">{{ summary.needs_review }}</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-label">Exceptions</span>
+      <span class="stat-value">{{ summary.exceptions }}</span>
+    </div>
+  </div>
+
+  <h2 class="section-title">By priority</h2>
+  <div class="kpi-row">
+    {% for p in priorities %}
+    <div class="stat-tile status-tile status-{{ p.label|lower }}">
+      <span class="stat-label">{{ p.label }}</span>
+      <span class="stat-value">{{ p.count }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="viz-grid">
+    <section class="viz-card">
+      <h2 class="section-title">By department</h2>
+      <ol class="bar-list">
+        {% for d in departments %}
+        <li class="bar-row" tabindex="0">
+          <span class="bar-label">{{ d.label }}</span>
+          <span class="bar-track"><span class="bar-fill" style="width: {{ d.pct_of_max }}%"></span></span>
+          <span class="bar-value">{{ d.count }}</span>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section class="viz-card">
+      <h2 class="section-title">By category</h2>
+      <ol class="bar-list">
+        {% for c in categories %}
+        <li class="bar-row" tabindex="0">
+          <span class="bar-label">{{ c.label }}</span>
+          <span class="bar-track"><span class="bar-fill" style="width: {{ c.pct_of_max }}%"></span></span>
+          <span class="bar-value">{{ c.count }}</span>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+  </div>
+
+  <h2 class="section-title">By sentiment</h2>
+  <p class="visually-hidden">Sentiment breakdown: {{ sentiment_summary }}.</p>
+  <div class="sentiment-bar" aria-hidden="true">
+    {% for s in sentiments %}
+      {% if s.count > 0 %}
+      <div class="sentiment-seg sent-{{ s.label|lower }}" style="width: {{ s.pct }}%">
+        {% if s.pct >= 12 %}<span>{{ s.label }} {{ s.pct }}%</span>{% endif %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <ul class="legend">
+    {% for s in sentiments %}
+    <li><span class="legend-key sent-{{ s.label|lower }}"></span>{{ s.label }} <b>{{ s.count }}</b></li>
+    {% endfor %}
+  </ul>
+
+  <p class="next">
+    Full detail, including the department queues and the draft notification emails:
+    <code>output\feedback_report.xlsx</code> and <code>output\by_department\</code>.
+  </p>
+{% endif %}
+</div>
+{% endblock %}

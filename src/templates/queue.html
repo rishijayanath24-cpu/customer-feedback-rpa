@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Staff queue{% endblock %}
+
+{% block content %}
+<div class="card wide">
+  <h1>Staff queue</h1>
+  <p class="lede">
+    {{ total }} submission{{ 's' if total != 1 }} from the web form, classified live and grouped by
+    the team each one routes to.
+  </p>
+
+  {% if not by_dept %}
+    <p class="empty">Nothing here yet. <a href="{{ url_for('form') }}">Submit some feedback</a> and it
+    will appear in this queue straight away.</p>
+  {% endif %}
+
+  {% for dept, items in by_dept.items() %}
+  <section class="dept">
+    <h2>{{ dept }} <span class="count">{{ items|length }}</span></h2>
+    <table>
+      <thead>
+        <tr><th>Ticket</th><th>Priority</th><th>Category</th><th>Customer</th><th>Feedback</th></tr>
+      </thead>
+      <tbody>
+        {% for i in items %}
+        <tr>
+          <td class="mono">{{ i.feedback_id }}</td>
+          <td><span class="pill p-{{ i.result.priority|lower }}">{{ i.result.priority }}</span></td>
+          <td>{{ i.result.category }}</td>
+          <td>{{ i.customer_name }}</td>
+          <td class="quote">{{ i.feedback_text }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

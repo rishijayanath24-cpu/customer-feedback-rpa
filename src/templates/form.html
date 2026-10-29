@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Tell us how we did{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h1>Tell us how we did</h1>
+  <p class="lede">
+    Every message is read, sorted and sent to the right team automatically &mdash; usually within
+    a few seconds. You will see where yours went as soon as you send it.
+  </p>
+
+  <form method="post" novalidate>
+    <div class="field">
+      <label for="customer_name">Your name</label>
+      <input id="customer_name" name="customer_name" autocomplete="name"
+             value="{{ values.customer_name or '' }}"
+             {% if errors.customer_name %}aria-invalid="true"{% endif %}>
+      {% if errors.customer_name %}<p class="err">{{ errors.customer_name }}</p>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email" autocomplete="email"
+             placeholder="you@example.com" value="{{ values.email or '' }}"
+             {% if errors.email %}aria-invalid="true"{% endif %}>
+      {% if errors.email %}<p class="err">{{ errors.email }}</p>{% endif %}
+    </div>
+
+    <fieldset class="field">
+      <legend>How would you rate us? <span class="opt">optional</span></legend>
+      <div class="stars">
+        {# Listed high-to-low: the stylesheet reverses them so 1 sits on the left, and the
+           "checked ~ label" rule can colour every star below the one picked. #}
+        {% for n in [5, 4, 3, 2, 1] %}
+          <input type="radio" id="r{{ n }}" name="rating" value="{{ n }}"
+                 {% if values.rating == n|string %}checked{% endif %}>
+          <label for="r{{ n }}" title="{{ n }} star{{ 's' if n > 1 }}">&#9733;</label>
+        {% endfor %}
+      </div>
+      {% if errors.rating %}<p class="err">{{ errors.rating }}</p>{% endif %}
+    </fieldset>
+
+    <div class="field">
+      <label for="feedback_text">What happened?</label>
+      <textarea id="feedback_text" name="feedback_text" rows="6"
+                placeholder="Tell us about your order, the product, our app or our team&hellip;"
+                {% if errors.feedback_text %}aria-invalid="true"{% endif %}>{{ values.feedback_text or '' }}</textarea>
+      {% if errors.feedback_text %}<p class="err">{{ errors.feedback_text }}</p>{% endif %}
+    </div>
+
+    <button type="submit">Send feedback</button>
+  </form>
+</div>
+{% endblock %}

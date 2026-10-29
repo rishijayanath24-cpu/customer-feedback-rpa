@@ -1,0 +1,36 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    name: pytest · ${{ matrix.os }} · Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.10", "3.12", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -v
+
+      - name: Run the bot on the sample data
+        run: python src/main.py --output ci-output
+
+      # The generated Excel report, queues and email drafts, downloadable from the run page.
+      - name: Upload bot output
+        if: matrix.os == 'windows-latest' && matrix.python == '3.12'
+        uses: actions/upload-artifact@v7
+        with:
+          name: bot-output
+          path: ci-output/

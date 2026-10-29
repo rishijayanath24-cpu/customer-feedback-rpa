@@ -1,0 +1,146 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_ProjectDir" Type="InArgument(x:String)" />
+  </x:Members>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Customer Feedback Classification and Routing - continuous monitor">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="botExe" />
+      <Variable x:TypeArguments="x:Int32" Name="exitCode" />
+      <Variable x:TypeArguments="x:String" Name="botOutput" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dt_Results" />
+      <Variable x:TypeArguments="x:String" Name="liveCsvPath" />
+      <Variable x:TypeArguments="x:String" Name="stopFlagPath" />
+      <Variable x:TypeArguments="s:DateTime" Name="lastWriteTime" />
+      <Variable x:TypeArguments="s:DateTime" Name="currentWriteTime" />
+      <Variable x:TypeArguments="x:Int32" Name="pollSeconds" />
+    </Sequence.Variables>
+
+    <Assign DisplayName="Poll interval">
+      <Assign.To><OutArgument x:TypeArguments="x:Int32">[pollSeconds]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="x:Int32">10</InArgument></Assign.Value>
+    </Assign>
+
+    <If Condition="[String.IsNullOrWhiteSpace(in_ProjectDir)]" DisplayName="Default project folder">
+      <If.Then>
+        <Assign DisplayName="Default in_ProjectDir if empty">
+          <Assign.To><OutArgument x:TypeArguments="x:String">[in_ProjectDir]</OutArgument></Assign.To>
+          <Assign.Value><InArgument x:TypeArguments="x:String">["D:\rpa"]</InArgument></Assign.Value>
+        </Assign>
+      </If.Then>
+    </If>
+
+    <Assign DisplayName="Bot launcher path">
+      <Assign.To><OutArgument x:TypeArguments="x:String">[botExe]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="x:String">[System.IO.Path.Combine(in_ProjectDir, "run.bat")]</InArgument></Assign.Value>
+    </Assign>
+    <Assign DisplayName="Live feedback CSV path (written by the web app)">
+      <Assign.To><OutArgument x:TypeArguments="x:String">[liveCsvPath]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="x:String">[System.IO.Path.Combine(in_ProjectDir, "data", "feedback_live.csv")]</InArgument></Assign.Value>
+    </Assign>
+    <Assign DisplayName="Stop-flag path">
+      <Assign.To><OutArgument x:TypeArguments="x:String">[stopFlagPath]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="x:String">[System.IO.Path.Combine(in_ProjectDir, "uipath", "STOP")]</InArgument></Assign.Value>
+    </Assign>
+    <Assign DisplayName="No feedback processed yet">
+      <Assign.To><OutArgument x:TypeArguments="s:DateTime">[lastWriteTime]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="s:DateTime">[System.DateTime.MinValue]</InArgument></Assign.Value>
+    </Assign>
+
+    <ui:LogMessage DisplayName="Log start" Level="Info" Message="[&quot;Monitoring data\feedback_live.csv every &quot; &amp; pollSeconds.ToString &amp; &quot;s. Create uipath\STOP (or press Stop in Studio) to stop.&quot;]" />
+
+    <While Condition="[Not System.IO.File.Exists(stopFlagPath)]" DisplayName="Poll until uipath\STOP exists">
+      <Sequence DisplayName="One poll cycle">
+        <If Condition="[System.IO.File.Exists(liveCsvPath)]" DisplayName="Live CSV exists?">
+          <If.Then>
+            <Assign DisplayName="Read its last-modified time">
+              <Assign.To><OutArgument x:TypeArguments="s:DateTime">[currentWriteTime]</OutArgument></Assign.To>
+              <Assign.Value><InArgument x:TypeArguments="s:DateTime">[System.IO.File.GetLastWriteTimeUtc(liveCsvPath)]</InArgument></Assign.Value>
+            </Assign>
+          </If.Then>
+          <If.Else>
+            <Assign DisplayName="No submissions yet">
+              <Assign.To><OutArgument x:TypeArguments="s:DateTime">[currentWriteTime]</OutArgument></Assign.To>
+              <Assign.Value><InArgument x:TypeArguments="s:DateTime">[System.DateTime.MinValue]</InArgument></Assign.Value>
+            </Assign>
+          </If.Else>
+        </If>
+
+        <If Condition="[currentWriteTime &gt; lastWriteTime]" DisplayName="New feedback since last poll?">
+          <If.Then>
+            <Sequence DisplayName="Process the new feedback">
+              <ui:LogMessage Level="Info" Message="[&quot;New feedback detected - running the bot...&quot;]" />
+              <ui:InvokeCode ContinueOnError="{x:Null}" Code="Dim psi As New System.Diagnostics.ProcessStartInfo(&quot;cmd.exe&quot;, &quot;/c &quot;&quot;&quot;&quot;&quot; &amp; botExe &amp; &quot;&quot;&quot; 2&gt;&amp;1&quot;&quot;&quot;)&#xA;psi.UseShellExecute = False&#xA;psi.RedirectStandardOutput = True&#xA;psi.CreateNoWindow = True&#xA;psi.WorkingDirectory = in_ProjectDir&#xA;Dim p As System.Diagnostics.Process = System.Diagnostics.Process.Start(psi)&#xA;botOutput = p.StandardOutput.ReadToEnd()&#xA;p.WaitForExit()&#xA;exitCode = p.ExitCode" DisplayName="Run Python bot (run.bat)">
+                <ui:InvokeCode.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="botExe">[botExe]</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="in_ProjectDir">[in_ProjectDir]</InArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="botOutput">[botOutput]</OutArgument>
+                  <OutArgument x:TypeArguments="x:Int32" x:Key="exitCode">[exitCode]</OutArgument>
+                </ui:InvokeCode.Arguments>
+              </ui:InvokeCode>
+
+              <If Condition="[exitCode &lt;&gt; 0]" DisplayName="Bot failed?">
+                <If.Then>
+                  <ui:LogMessage Level="Error" Message="[&quot;Bot failed with exit code &quot; &amp; exitCode.ToString &amp; &quot;: &quot; &amp; botOutput]" />
+                </If.Then>
+                <If.Else>
+                  <Sequence DisplayName="Read and log results">
+                    <ui:InvokeCode ContinueOnError="{x:Null}" Code="Dim dt As New System.Data.DataTable()&#xA;Using parser As New Microsoft.VisualBasic.FileIO.TextFieldParser(csvPath, System.Text.Encoding.UTF8)&#xA;parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited&#xA;parser.SetDelimiters(&quot;,&quot;)&#xA;parser.HasFieldsEnclosedInQuotes = True&#xA;Dim headers() As String = parser.ReadFields()&#xA;For Each h As String In headers&#xA;dt.Columns.Add(h)&#xA;Next&#xA;While Not parser.EndOfData&#xA;dt.Rows.Add(parser.ReadFields())&#xA;End While&#xA;End Using&#xA;dt_Results = dt" DisplayName="Read classified_feedback.csv">
+                      <ui:InvokeCode.Arguments>
+                        <InArgument x:TypeArguments="x:String" x:Key="csvPath">[System.IO.Path.Combine(in_ProjectDir, "output", "classified_feedback.csv")]</InArgument>
+                        <OutArgument x:TypeArguments="sd:DataTable" x:Key="dt_Results">[dt_Results]</OutArgument>
+                      </ui:InvokeCode.Arguments>
+                    </ui:InvokeCode>
+                    <ui:LogMessage Level="Info" Message="[&quot;Bot finished. Records routed: &quot; &amp; dt_Results.Rows.Count.ToString]" />
+                    <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[dt_Results]" DisplayName="For each routed record">
+                      <ui:ForEachRow.Body>
+                        <ActivityAction x:TypeArguments="sd:DataRow">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                          </ActivityAction.Argument>
+                          <ui:LogMessage Level="Info" Message="[&quot;Routed &quot; &amp; row(&quot;feedback_id&quot;).ToString &amp; &quot; -&gt; &quot; &amp; row(&quot;department&quot;).ToString &amp; &quot; [&quot; &amp; row(&quot;priority&quot;).ToString &amp; &quot;]&quot;]" />
+                        </ActivityAction>
+                      </ui:ForEachRow.Body>
+                    </ui:ForEachRow>
+                  </Sequence>
+                </If.Else>
+              </If>
+
+              <Assign DisplayName="Remember this version as processed">
+                <Assign.To><OutArgument x:TypeArguments="s:DateTime">[lastWriteTime]</OutArgument></Assign.To>
+                <Assign.Value><InArgument x:TypeArguments="s:DateTime">[currentWriteTime]</InArgument></Assign.Value>
+              </Assign>
+            </Sequence>
+          </If.Then>
+        </If>
+
+        <ui:InvokeCode ContinueOnError="{x:Null}" Code="System.Threading.Thread.Sleep(pollSeconds * 1000)" DisplayName="Wait before next poll">
+          <ui:InvokeCode.Arguments>
+            <InArgument x:TypeArguments="x:Int32" x:Key="pollSeconds">[pollSeconds]</InArgument>
+          </ui:InvokeCode.Arguments>
+        </ui:InvokeCode>
+      </Sequence>
+    </While>
+
+    <ui:LogMessage DisplayName="Log stop" Level="Info" Message="[&quot;Stop flag detected - monitor stopped.&quot;]" />
+  </Sequence>
+</Activity>

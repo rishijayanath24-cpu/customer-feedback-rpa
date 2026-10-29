@@ -1,0 +1,42 @@
+feedback_id,date,customer_name,email,channel,rating,feedback_text
+F001,10/1/2026,Alice Johnson,alice.j@example.com,Email,1,I was charged twice for my October subscription. Please refund the duplicate payment immediately.
+F002,10/1/2026,Brian Smith,brian.s@example.com,Web Form,2,My package never arrived and the tracking page has not updated in two weeks.
+F003,10/2/2026,Carla Gomez,carla.g@example.com,App Store,1,The app crashes every time I open the settings screen. Very frustrating bug.
+F004,10/2/2026,David Lee,david.l@example.com,Survey,5,Absolutely love the new headphones! Excellent sound quality and highly recommend them.
+F005,10/3/2026,Emma Wilson,emma.w@example.com,Email,2,The blender arrived with a cracked jar. Poor quality for the price.
+F006,10/3/2026,Frank Moore,frank.m@example.com,Phone,1,I waited on hold for 45 minutes and the agent was rude. Unacceptable customer service.
+F007,10/4/2026,Grace Kim,grace.k@example.com,Web Form,4,It would be great if you could add a dark mode option to the mobile app.
+F008,10/4/2026,Henry Brown,henry.b@example.com,Email,1,I see an unauthorized charge on my card. This is fraud and I will contact my lawyer.
+F009,10/5/2026,Isabel Cruz,isabel.c@example.com,Survey,5,"Fantastic service, the delivery was fast and the team was so helpful. Thank you!"
+F010,10/5/2026,Jack Turner,jack.t@example.com,Social Media,2,I'm locked out of my account and the password reset email never comes.
+F011,10/6/2026,Karen White,karen.w@example.com,Email,3,The invoice I received has the wrong tax amount. Please send a corrected invoice.
+F012,10/6/2026,Liam Davis,liam.d@example.com,Web Form,1,The courier left my parcel at the wrong address and nobody responds to my emails.
+F013,10/7/2026,Mia Patel,mia.p@example.com,App Store,3,Please add an integration with Google Calendar. I wish the app had this feature.
+F014,10/7/2026,Noah Garcia,noah.g@example.com,Survey,1,"The vacuum stopped working after two weeks. Defective product, total waste of money."
+F015,10/8/2026,Olivia Martin,olivia.m@example.com,Email,2,Website keeps freezing at checkout and shows an error message.
+F016,10/8/2026,Paul Rodriguez,paul.r@example.com,Phone,5,Your support representative was wonderful and solved my problem in minutes. Great service!
+F017,10/9/2026,Quinn Adams,quinn.a@example.com,Web Form,2,I was overcharged on my last bill and nobody has replied to my ticket.
+F018,10/9/2026,Rachel Nguyen,rachel.n@example.com,Survey,4,Love the product but shipping took too long. The delivery was delayed by a week.
+F019,10/10/2026,Sam Ortiz,sam.o@example.com,Email,1,I want to cancel my account. This is the worst experience and I am going to sue if my data is not deleted. GDPR applies.
+F020,10/10/2026,Tina Clark,tina.c@example.com,Social Media,3,Would be nice to have an option to export my reports to Excel.
+F021,10/11/2026,Umar Hassan,umar.h@example.com,App Store,1,Cannot sign in after the latest update. Login screen shows a timeout error.
+F022,10/11/2026,Vera Lopez,vera.l@example.com,Survey,2,The jacket fell apart after one wash. Very poor quality.
+F023,10/12/2026,Will Scott,will.s@example.com,Email,5,Best purchase I have made this year. Amazing quality and perfect fit.
+F024,10/12/2026,Xena Young,xena.y@example.com,Phone,2,Called three times and my issue was ignored. Customer service needs training.
+F025,10/13/2026,Yusuf Khan,yusuf.k@example.com,Web Form,3,"Received a damaged box, but the tracking said delivered on time."
+F026,10/13/2026,Zoe Baker,zoe.b@example.com,Survey,5,"Thanks to the whole team, everything was awesome!"
+F027,10/14/2026,Adam Hill,adam.h@example.com,Email,2,I have not received my refund yet. It has been three weeks since I returned the item.
+F028,10/14/2026,Bella Reed,bella.r@example.com,App Store,4,"The app is slow to load on my phone, but I suggest adding offline mode too."
+F029,10/15/2026,Chris Evans,chris.e@example.com,Social Media,3,Just wondering what time your store opens on Sunday.
+F030,10/15/2026,Dana Fox,dana.f@example.com,Survey,,The new pricing is confusing and my payment failed twice.
+F031,10/16/2026,Eli Stone,eli.s@example.com,Email,1,My package was stolen and I want to sue.
+F032,10/16/2026,Fiona Webb,fiona.w@example.com,Web Form,2,   
+F033,10/17/2026,Greg Hall,greg.h@example.com,Phone,1,Terrible experience. The agent hung up on me and the app also crashes.
+F034,10/17/2026,Hana Ito,hana.i@example.com,Email,5,"Great service, thank you so much! The delivery arrived early."
+F035,10/18/2026,Ivan Petrov,ivan.p@example.com,Survey,2,My personal data was shared with a third party. I am concerned about privacy.
+F001,10/18/2026,Alice Johnson,alice.j@example.com,Email,1,Duplicate submission of the same billing complaint.
+F036,10/19/2026,Jill Ross,jill.r@example.com,App Store,3,"The two-factor code never arrives, so I can't log in."
+F037,10/19/2026,Kyle Price,kyle.p@example.com,Web Form,4,Nice work overall.
+F038,10/20/2026,Lena Ward,lena.w@example.com,Email,2,The shoes were scratched and the shipping box was crushed too.
+F039,10/20/2026,Marc Bell,marc.b@example.com,Survey,1,I will file a chargeback if I don't get my money back this week.
+F040,10/21/2026,Nina Cole,nina.c@example.com,Social Media,5,I love this brand! Outstanding support team and an excellent app.

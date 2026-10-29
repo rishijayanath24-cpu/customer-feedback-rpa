@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Thank you &mdash; ticket {{ row.feedback_id }}{% endblock %}
+
+{% block content %}
+<div class="card">
+  <p class="eyebrow">Ticket {{ row.feedback_id }}</p>
+  <h1>Thank you, {{ row.customer_name.split()[0] }}.</h1>
+  <p class="lede">
+    Your feedback has been classified and sent to the team below. We will be in touch at
+    <strong>{{ row.email }}</strong>.
+  </p>
+
+  <div class="routing">
+    <div class="route-step">
+      <span class="label">Category</span>
+      <span class="value">{{ result.category }}</span>
+    </div>
+    <div class="arrow" aria-hidden="true">&rarr;</div>
+    <div class="route-step">
+      <span class="label">Routed to</span>
+      <span class="value">{{ result.department }}</span>
+    </div>
+    <div class="arrow" aria-hidden="true">&rarr;</div>
+    <div class="route-step">
+      <span class="label">Priority</span>
+      <span class="value"><span class="pill p-{{ result.priority|lower }}">{{ result.priority }}</span></span>
+    </div>
+  </div>
+
+  <dl class="detail">
+    <div><dt>Reply due by</dt><dd>{{ due }}</dd></div>
+    <div><dt>Tone detected</dt><dd>{{ result.sentiment }}</dd></div>
+    <div><dt>Matched on</dt>
+      <dd>{% if result.matched_keywords %}
+            {% for k in result.matched_keywords %}<code>{{ k }}</code>{% endfor %}
+          {% else %}no rule keywords &mdash; queued for a person to read{% endif %}</dd></div>
+    {% if result.needs_review %}
+    <div><dt>Status</dt><dd class="flag">Flagged for manual review</dd></div>
+    {% endif %}
+  </dl>
+
+  <blockquote>{{ row.feedback_text }}</blockquote>
+
+  <p class="next">
+    <strong>What happens next:</strong> this ticket is now in
+    <code>data/feedback_live.csv</code>. The next bot run picks it up, adds it to the
+    {{ result.department }} queue and drafts that team's notification.
+  </p>
+
+  <p class="actions">
+    <a class="btn" href="{{ url_for('form') }}">Send another</a>
+    <a class="btn ghost" href="{{ url_for('queue') }}">See the staff queue</a>
+  </p>
+</div>
+{% endblock %}

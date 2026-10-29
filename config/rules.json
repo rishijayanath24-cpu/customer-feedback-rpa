@@ -1,0 +1,107 @@
+{
+  "default_category": "General Inquiry",
+  "default_department": "Customer Support",
+  "min_score_for_auto_route": 2,
+  "categories": [
+    {
+      "name": "Legal & Privacy",
+      "department": "Legal & Compliance",
+      "keywords": {
+        "lawyer": 3, "attorney": 3, "lawsuit": 3, "sue": 3, "legal action": 3,
+        "data breach": 3, "privacy": 2, "gdpr": 3, "personal data": 2,
+        "unauthorized charge": 3, "fraud": 3, "scam": 2, "terms of service": 1
+      }
+    },
+    {
+      "name": "Billing & Payments",
+      "department": "Finance",
+      "keywords": {
+        "invoice": 2, "billing": 2, "billed": 2, "overcharged": 3, "charged twice": 3,
+        "double charged": 3, "double charge": 3, "payment": 2, "credit card": 1,
+        "subscription": 1, "price": 1, "pricing": 1, "receipt": 1, "tax": 1,
+        "refund": 2, "chargeback": 3, "charged": 1
+      }
+    },
+    {
+      "name": "Shipping & Delivery",
+      "department": "Logistics",
+      "keywords": {
+        "shipping": 2, "shipment": 2, "delivery": 2, "delivered": 1, "courier": 2,
+        "tracking": 2, "package": 1, "parcel": 2, "arrived late": 3, "never arrived": 3,
+        "lost in transit": 3, "wrong address": 2, "delayed": 1, "damaged in transit": 3
+      }
+    },
+    {
+      "name": "Product Quality",
+      "department": "Quality Assurance",
+      "keywords": {
+        "defective": 3, "broken": 2, "damaged": 2, "faulty": 3, "poor quality": 3,
+        "cheap": 1, "stopped working": 2, "fell apart": 3, "cracked": 2, "scratched": 2,
+        "malfunction": 2, "worn out": 2, "doesn't work": 1, "does not work": 1
+      }
+    },
+    {
+      "name": "Technical Issue",
+      "department": "IT Support",
+      "keywords": {
+        "bug": 3, "crash": 3, "crashes": 3, "crashed": 3, "error": 2, "freezes": 3,
+        "freezing": 3, "slow": 1, "loading": 1, "app": 1, "website": 1, "login": 2,
+        "log in": 2, "password": 2, "can't sign in": 3, "cannot sign in": 3,
+        "locked out": 3, "two-factor": 2, "2fa": 2, "update": 1, "glitch": 3,
+        "not loading": 3, "server": 1, "timeout": 2
+      }
+    },
+    {
+      "name": "Customer Service",
+      "department": "Customer Support",
+      "keywords": {
+        "rude": 3, "hung up": 3, "support": 1, "agent": 2, "representative": 2, "wait time": 3,
+        "on hold": 3, "no response": 3, "never replied": 3, "unhelpful": 3,
+        "customer service": 3, "ignored": 2, "call center": 2, "waited": 1
+      }
+    },
+    {
+      "name": "Feature Request",
+      "department": "Product Management",
+      "keywords": {
+        "feature": 2, "would be great": 3, "please add": 3, "wish": 2, "suggest": 2,
+        "suggestion": 2, "it would be nice": 3, "would be nice": 3, "dark mode": 3, "integration": 2,
+        "option to": 1, "should have": 1, "missing": 1, "improvement": 1
+      }
+    },
+    {
+      "name": "Praise",
+      "department": "Marketing",
+      "keywords": {
+        "love": 2, "amazing": 2, "excellent": 2, "fantastic": 2, "great service": 3,
+        "thank you": 1, "thanks": 1, "highly recommend": 3, "wonderful": 2,
+        "perfect": 2, "awesome": 2, "best": 1, "outstanding": 2
+      }
+    }
+  ],
+  "urgent_keywords": [
+    "lawyer", "attorney", "lawsuit", "sue", "legal action", "data breach", "fraud",
+    "chargeback", "unauthorized charge", "cancel my account", "unacceptable",
+    "locked out", "scam", "gdpr", "worst"
+  ],
+  "sentiment": {
+    "positive": [
+      "love", "great", "amazing", "excellent", "fantastic", "good", "happy", "perfect",
+      "awesome", "wonderful", "thank", "thanks", "recommend", "best", "outstanding",
+      "satisfied", "fast", "easy"
+    ],
+    "negative": [
+      "terrible", "awful", "worst", "bad", "horrible", "angry", "frustrated", "disappointed",
+      "unacceptable", "rude", "broken", "defective", "useless", "slow", "late",
+      "poor", "cheap", "damaged", "waste", "annoying", "unhelpful", "ignored", "error",
+      "crash", "crashes", "lost", "wrong", "fraud", "scam", "overcharged"
+    ],
+    "negators": ["not", "no", "never", "isn't", "wasn't", "don't", "didn't", "can't", "cannot"]
+  },
+  "sla_hours": {
+    "Urgent": 4,
+    "High": 24,
+    "Normal": 72,
+    "Low": 120
+  }
+}

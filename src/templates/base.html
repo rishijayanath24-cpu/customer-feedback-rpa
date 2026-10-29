@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Customer Feedback{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('form') }}">
+      <span class="brand-mark">NC</span>
+      <span>Northwind&nbsp;Co.<small>Customer Care</small></span>
+    </a>
+    <nav>
+      <a href="{{ url_for('form') }}" {% if request.endpoint == 'form' %}class="on"{% endif %}>Leave feedback</a>
+      <a href="{{ url_for('queue') }}" {% if request.endpoint == 'queue' %}class="on"{% endif %}>Staff queue</a>
+      <a href="{{ url_for('dashboard') }}" {% if request.endpoint == 'dashboard' %}class="on"{% endif %}>Report</a>
+    </nav>
+  </header>
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer>
+    Robotic Process Automation coursework &middot; feedback is classified by rules in
+    <code>config/rules.json</code> and routed by the bot.
+  </footer>
+</body>
+</html>
